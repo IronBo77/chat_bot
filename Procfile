@@ -1,0 +1,1 @@
+bot: python stec_st_bot.py

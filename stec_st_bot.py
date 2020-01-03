@@ -4,6 +4,7 @@ from telegram.ext import Filters
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 import logging
+import os
 
 
 REQUEST_KWARGS={
@@ -41,7 +42,8 @@ def talk_to_me(update,context):
 
 
 def main():
-    mybot = Updater(token="MY_TOKEN",use_context=True)
+    TOKEN = os.environ.get('MY_TOKEN')
+    mybot = Updater(token=str(TOKEN),use_context=True)
     dp = mybot.dispatcher
 
     print('Бот стартовал')
