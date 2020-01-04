@@ -51,11 +51,6 @@ def talk_to_me(update,context):
         user_text = f'Привет {update.message.from_user.first_name} ({update.message.from_user.username})! ' \
                 f'Ты написал "{update.message.text}".'
         update.message.reply_text(user_text)
-    else:
-        user_text = update.message.text
-        print(user_text)
-        print(update.message)
-        update.message.reply_text(user_text)
 
 
 def main():
