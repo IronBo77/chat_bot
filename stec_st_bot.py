@@ -47,7 +47,7 @@ def new_member(update,context):
 #Обработка сообщений
 def talk_to_me(update,context):
 
-    if update.message.text=='тест':
+    if update.message.text=='тест' or 'Тест':
         user_text = f'Привет {update.message.from_user.first_name} ({update.message.from_user.username})! ' \
                 f'Ты написал "{update.message.text}".'
         update.message.reply_text(user_text)
