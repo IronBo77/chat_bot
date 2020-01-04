@@ -71,7 +71,7 @@ def main():
     # Добавляем задание
     job.run_daily(sender, time)
     # Обработчик команд
-    dp.add_handler(CommandHandler("start", sender))
+    dp.add_handler(CommandHandler("start", greet_user))
     # Обработчик сообщений
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     # Обработчик добавления новых участников
