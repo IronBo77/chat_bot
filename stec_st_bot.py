@@ -100,13 +100,14 @@ def talk_to_me(update,context):
             request.query = text
             responseJson = json.loads(request.getresponse().read().decode('utf-8'))
             response = responseJson.get('result').get('parameters').get('address').get('city')
-
+            print(response)
 
             if response:  # Если есть ответ выводим
                 context.bot.send_message(chat_id=update.message.chat.id, text=response)
                 owm = OWM(str(OWM_TOKEN))
                 owm.set_language(language='ru')
                 t_city = goslate.Goslate().translate(response, 'en')
+                print(t_city)
                 obs = owm.weather_at_place(t_city)
                 w = obs.get_weather().get_temperature(unit='celsius')
                 context.bot.send_message(chat_id=update.message.chat.id, text = w['temp'])
