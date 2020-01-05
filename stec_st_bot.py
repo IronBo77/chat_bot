@@ -122,7 +122,7 @@ def main():
     job = mybot.job_queue
     print('Бот стартовал')
     #Время дня в которое будет выполнятся ежедневное задание
-    time = datetime.time(18,34,0)
+    time = datetime.time(12,30,0)
     #Добавляем задание
     job.run_daily(sender,time)
     # Обработчик команд
