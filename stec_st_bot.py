@@ -58,6 +58,7 @@ def help(update,context):
 
 def info(update,context):
     update.message.reply_text('О нас:')
+    print('это инфо')
 
 def resp(update,context):
     update.message.reply_text('Основные направления\n'
