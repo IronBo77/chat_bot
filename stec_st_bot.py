@@ -47,6 +47,7 @@ def start(update,context):
            'Данный чатбот также умеет отображать погоду. Для это следует в начале сообщения указать "@bot_name" ' \
            'и далее сделать запрос погоды, например "погода в москве"'
     update.message.reply_text(text)
+    print('это старт')
     logging.info(text)
 
 def tasks(update,context):
