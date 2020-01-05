@@ -95,6 +95,7 @@ def talk_to_me(update,context):
         dict_words.get(update.message.text)[0](dict_words.get(update.message.text)[1])
     else:
         request = apiai.ApiAI(str(DF_TOKEN)).text_request()  # Токен для авторизации в Dialogflow
+        print('запрос Df прошел')
         request.lang = 'ru'  # Указвыаем язык запроса
         request.session_id = 'BotNameST'  # Id сессии диалога
         text = update.message.text
