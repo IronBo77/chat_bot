@@ -1,10 +1,10 @@
-from telegram.ext import Updater
-from telegram.ext import MessageHandler
-from telegram.ext import Filters
-from telegram.ext import Updater
-from telegram.ext import CommandHandler
+from telegram.ext import MessageHandler,Filters,Updater,CommandHandler
+import apiai
 import logging
 import datetime
+import json
+from pyowm import OWM
+import goslate
 import os
 
 
@@ -20,8 +20,10 @@ REQUEST_KWARGS={
         # 'username': 'user',
         # 'password': 'password'
     }
-    }
+    } 
+    
 '''
+
 T_TOKEN = os.environ.get('TEL_TOKEN')
 DF_TOKEN = os.environ.get('DL_FL_TOKEN')
 OWM_TOKEN = os.environ.get('Op_We_TOKEN')
@@ -87,21 +89,19 @@ def talk_to_me(update,context):
         'тест': [update.message.reply_text,user_text],
         'start': [update.message.reply_text,comm_text],
         'help': [update.message.reply_text, comm_text],
-        'info': [update.message.reply_text, comm_text],
-        'tasks': [update.message.reply_text, comm_text],
         'resp': [update.message.reply_text, comm_text]
     }
     if update.message.text in dict_words:
         dict_words.get(update.message.text)[0](dict_words.get(update.message.text)[1])
     else:
         request = apiai.ApiAI(str(DF_TOKEN)).text_request()  # Токен для авторизации в Dialogflow
-        print('запрос Df прошел')
         request.lang = 'ru'  # Указвыаем язык запроса
         request.session_id = 'BotNameST'  # Id сессии диалога
         text = update.message.text
         if context.bot.name in text:
             request.query = text
             responseJson = json.loads(request.getresponse().read().decode('utf-8'))
+            print( responseJson)
             response = responseJson.get('result').get('parameters').get('address').get('city')
             print(response)
 
@@ -112,11 +112,13 @@ def talk_to_me(update,context):
                 t_city = goslate.Goslate().translate(response, 'en')
                 print(t_city)
                 obs = owm.weather_at_place(t_city)
+                print(owm.weather_at_place(t_city))
                 w = obs.get_weather().get_temperature(unit='celsius')
                 context.bot.send_message(chat_id=update.message.chat.id, text = w['temp'])
 
             else:  # Если нет говорим что запрос не понятен
                 context.bot.send_message(chat_id=update.message.chat.id, text='Не совсем понял Ваш запрос')
+
 
 
 def main():
