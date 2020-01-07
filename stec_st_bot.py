@@ -109,6 +109,7 @@ def talk_to_me(update,context):
             if response:  # Если есть ответ выводим
                 owm = OWM(str(OWM_TOKEN))
                 owm.set_language(language='ru')
+                print('ОВМ')
                 tr = Translater.Translater()
                 tr.set_key(str(YAND_TOKEN))
                 tr.set_text(response)
