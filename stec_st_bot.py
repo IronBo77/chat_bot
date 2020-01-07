@@ -129,8 +129,8 @@ def talk_to_me(update,context):
                                          text=f'Сегодня ожидается: {w.get_detailed_status()}.\n'
                                               f'Диапазон температу: от {t["temp_min"]}°С до '
                                               f'{t["temp_max"]}°С. Текущая температура: '
-                                              f'{t["temp_max"]}°С\n'
-                                              f'')
+                                              f'{t["temp"]}°С\n'
+                                              )
             else:  # Если нет говорим что запрос не понятен
                 context.bot.send_message(chat_id=update.message.chat.id, text='Не совсем понял Ваш запрос')
 
