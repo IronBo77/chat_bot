@@ -108,8 +108,10 @@ def talk_to_me(update,context):
             if response:  # Если есть ответ выводим
                 context.bot.send_message(chat_id=update.message.chat.id, text=response)
                 owm = OWM(str(OWM_TOKEN))
+                print("овм")
                 owm.set_language(language='ru')
                 t_city = goslate.Goslate().translate(response, 'en')
+                print("переведено")
                 print(t_city)
                 obs = owm.weather_at_place(t_city)
                 print(owm.weather_at_place(t_city))
