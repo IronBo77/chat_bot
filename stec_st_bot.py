@@ -45,7 +45,8 @@ def start(update,context):
            '/resp - наши проекты и ответственные за них;\n' \
            '/help - помощь;\n' \
            '/tasks - текущие задачи;\n' \
-           '/info - о нас;\n' \
+           '/schedule - расписание;\n'\ 
+           '/info - о нас;\n'\
            '\n' \
            'Данный чатбот также умеет отображать погоду. Для это следует в начале сообщения указать "@bot_name" ' \
            'и далее сделать запрос погоды, например "погода в москве"'
@@ -55,6 +56,9 @@ def start(update,context):
 
 def tasks(update,context):
     update.message.reply_text('Текущие задачи:')
+
+def schedule(update,context):
+    context.bot.send_photo(update.message.chat.id,open('1.jpg','rb'))
 
 def help(update,context):
     update.message.reply_text('Тебе никто не поможет! Ты сам должен со всем разобраться!')
@@ -144,6 +148,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("info", info))
     dp.add_handler(CommandHandler("tasks", tasks))
+    dp.add_handler(CommandHandler("schedule", schedule))
     # Обработчик сообщений
     dp.add_handler(MessageHandler(Filters.text,talk_to_me))
     # Обработчик добавления новых участников
