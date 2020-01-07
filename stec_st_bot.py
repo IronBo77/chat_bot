@@ -113,7 +113,6 @@ def talk_to_me(update,context):
             if response:  # Если есть ответ выводим
                 owm = OWM(str(OWM_TOKEN))
                 owm.set_language(language='ru')
-                print('ОВМ')
                 tr = Translater.Translater()
                 tr.set_key(str(YAND_TOKEN))
                 tr.set_text(response)
@@ -123,10 +122,15 @@ def talk_to_me(update,context):
                 print(t_city)
                 obs = owm.weather_at_place(t_city)
                 print(owm.weather_at_place(t_city))
-                w = obs.get_weather().get_temperature(unit='celsius')
+                w = obs.get_weather()
+                t = w.get_temperature(unit='celsius')
                 context.bot.send_message(chat_id=update.message.chat.id, text=response)
-                context.bot.send_message(chat_id=update.message.chat.id, text=w['temp'])
-
+                context.bot.send_message(chat_id=update.message.chat.id,
+                                         text=f'Сегодня ожидается: {w.get_detailed_status()}.\n'
+                                              f'Диапазон температу: от {t["temp_min"]}°С до '
+                                              f'{t["temp_max"]}°С. Текущая температура: '
+                                              f'{t["temp_max"]}°С\n'
+                                              f'')
             else:  # Если нет говорим что запрос не понятен
                 context.bot.send_message(chat_id=update.message.chat.id, text='Не совсем понял Ваш запрос')
 
