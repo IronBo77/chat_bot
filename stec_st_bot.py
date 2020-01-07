@@ -4,7 +4,7 @@ import logging
 import datetime
 import json
 from pyowm import OWM
-import goslate
+from yandex import Translater
 import os
 
 
@@ -27,6 +27,7 @@ REQUEST_KWARGS={
 T_TOKEN = os.environ.get('TEL_TOKEN')
 DF_TOKEN = os.environ.get('DL_FL_TOKEN')
 OWM_TOKEN = os.environ.get('Op_We_TOKEN')
+YAND_TOKEN = os.environ.get('YT_TOKEN')
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
@@ -106,15 +107,20 @@ def talk_to_me(update,context):
             print(response)
 
             if response:  # Если есть ответ выводим
-                context.bot.send_message(chat_id=update.message.chat.id, text=response)
                 owm = OWM(str(OWM_TOKEN))
                 owm.set_language(language='ru')
-                t_city = goslate.Goslate().translate(response, 'en')
+                tr = Translater.Translater()
+                tr.set_key(str(YAND_TOKEN))
+                tr.set_text(response)
+                tr.set_from_lang('ru')
+                tr.set_to_lang('en')
+                t_city = tr.translate()
                 print(t_city)
                 obs = owm.weather_at_place(t_city)
                 print(owm.weather_at_place(t_city))
                 w = obs.get_weather().get_temperature(unit='celsius')
-                context.bot.send_message(chat_id=update.message.chat.id, text = w['temp'])
+                context.bot.send_message(chat_id=update.message.chat.id, text=response)
+                context.bot.send_message(chat_id=update.message.chat.id, text=w['temp'])
 
             else:  # Если нет говорим что запрос не понятен
                 context.bot.send_message(chat_id=update.message.chat.id, text='Не совсем понял Ваш запрос')
@@ -128,7 +134,7 @@ def main():
     job = mybot.job_queue
     print('Бот стартовал')
     #Время дня в которое будет выполнятся ежедневное задание
-    time = datetime.time(12,30,0)
+    time = datetime.time(9,30,0)
     #Добавляем задание
     job.run_daily(sender,time)
     # Обработчик команд
