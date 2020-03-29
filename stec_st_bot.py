@@ -6,7 +6,11 @@ import json
 from pyowm import OWM
 from yandex import Translater
 import os
-
+#для статистики
+from matplotlib import pyplot as plt
+from covid.api import CovId19Data
+import datetime as DT
+import matplotlib.ticker as ticker
 
 '''
 #При использовании прокси
@@ -34,9 +38,62 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     filename= 'bot.log'
                     )
 
+
+
+def c_stat():
+    # для статистики
+    api = CovId19Data(force=False)
+    x = []
+    confirmed = []
+    deaths = []
+
+    res2 = api.get_history_by_country("russia")
+
+    for dates in res2.get('russia').get('history'):
+        date = DT.datetime.strptime(dates, '%Y-%m-%d %H:%M:%S').date()
+        x.append(date.strftime('%m/%d'))
+
+    for cases in res2.get('russia').get('history').keys():
+        confirmed.append(res2.get('russia').get('history').get(cases)['confirmed'])
+
+    fig, ax = plt.subplots()
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(8))
+    #  Устанавливаем интервал вспомогательных делений:
+    ax.xaxis.set_minor_locator(ticker.MultipleLocator(2))
+
+    ax.plot(x, confirmed, color='r', linewidth=3)
+
+    #  Добавляем линии основной сетки:
+    ax.grid(which='major',
+            color='k')
+
+    #  Включаем видимость вспомогательных делений:
+    ax.minorticks_on()
+    #  Теперь можем отдельно задавать внешний вид
+    #  вспомогательной сетки:
+    ax.grid(which='minor',
+            color='gray',
+            linestyle=':')
+
+    plt.xticks(rotation=60)
+    ax.set_title('Подтвержденные случаи COVID-19 в России', fontsize=16)
+    ax.set_xlabel('Период', fontsize=14)
+    ax.set_ylabel('Количество людей', fontsize=14)
+
+    fig.tight_layout()
+    # plt.show()
+    fig.savefig('c_stat')
+
 #Отвечает за отправку ежедневных сообщений
 def sender(context):
     context.bot.send_message(-1001171884119,f'Уже {datetime.date.today()}, а мы до сих пор еще ничего не сделали!')
+    c_stat()
+    context.bot.send_photo(-1001171884119, open('c_stat.png', 'rb'))
+    api = CovId19Data(force=False)
+    res = api.filter_by_country("russia")
+    context.bot.send_message(-1001171884119, f'На текущий момент: {res.get("confirmed")} подтвержденных случаев,\n '
+                                             f'{res.get("deaths")} умерло,\n'
+                                             f'{res.get("recovered")} выздоровело.')
 
 #Обработка команды старт
 def start(update,context):
@@ -46,6 +103,7 @@ def start(update,context):
            '/resp - наши проекты и ответственные за них;\n' \
            '/help - помощь;\n' \
            '/tasks - текущие задачи;\n' \
+           '/covid_info - информация о COVID-19;\n' \
            '/info - о нас;\n' \
            '\n' \
            'Данный чатбот также умеет отображать погоду. Для это следует в начале сообщения указать "@bot_name" ' \
@@ -62,6 +120,15 @@ def schedule(update,context):
 
 def help(update,context):
     update.message.reply_text('Тебе никто не поможет! Ты сам должен со всем разобраться!')
+
+def covid_info(update,context):
+    c_stat()
+    context.bot.send_photo(update.message.chat.id, open('c_stat.png', 'rb'))
+    api = CovId19Data(force=False)
+    res = api.filter_by_country("russia")
+    update.message.reply_text( f'На текущий момент: {res.get("confirmed")} подтвержденных случаев,\n '
+                                             f'умерло - {res.get("deaths")},\n'
+                                             f'выздоровело - {res.get("recovered")}.')
 
 def info(update,context):
     update.message.reply_text('О нас:')
@@ -153,6 +220,7 @@ def main():
     dp.add_handler(CommandHandler("info", info))
     dp.add_handler(CommandHandler("tasks", tasks))
     dp.add_handler(CommandHandler("schedule", schedule))
+    dp.add_handler(CommandHandler("covid_info", covid_info))
     # Обработчик сообщений
     dp.add_handler(MessageHandler(Filters.text,talk_to_me))
     # Обработчик добавления новых участников
