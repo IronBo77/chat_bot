@@ -1,0 +1,12 @@
+0207 enter g d b 0207
+0208 enter g d b 0208
+0209 enter g d 0209
+0206 enter g d 0206
+0204a enter g i k l 0204
+0204b enter j k l 0204
+0203a enter g i k l n 0203
+0203b enter j k l n 0203
+0202a enter g i k l n p 0202
+0202b enter j k l n p 0202
+0201a enter g i k l n p 0201
+0201b enter j k l n p 0201
