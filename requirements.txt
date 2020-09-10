@@ -12,7 +12,6 @@ covid-data-api==1.5
 cryptography==2.8
 cycler==0.10.0
 decorator==4.4.2
-Django==3.0.2
 filelock==3.0.12
 future==0.18.2
 futures==3.1.1
