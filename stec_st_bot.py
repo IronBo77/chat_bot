@@ -2,10 +2,11 @@ from telegram.ext import MessageHandler,Filters,Updater,CommandHandler
 import apiai
 import logging
 import datetime
+from PIL import Image as Img, ImageDraw as ImgDr
 import json
+import os
 from pyowm import OWM
 from yandex import Translater
-import os
 #для статистики
 from matplotlib import pyplot as plt
 from covid.api import CovId19Data
