@@ -42,7 +42,7 @@ pysocks5==0.1
 python-dateutil==2.8.1
 python-telegram-bot==12.2.0
 pytz==2019.3
-PyYAML==5.2
+PyYAML==5.4
 requests==2.22.0
 schedule==0.6.0
 six==1.13.0
