@@ -52,7 +52,7 @@ toml==0.10.0
 tornado==6.0.3
 tox==3.14.3
 translator==0.0.9
-urllib3==1.25.7
+urllib3==1.26.5
 virtualenv==16.7.9
 yandex-translater==6.0
 zipp==0.6.0
